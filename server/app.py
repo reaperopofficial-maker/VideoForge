@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse
 import uvicorn
 
 from server.models.database import init_db
-from server.routes import projects, generate, agent
+from server.routes import projects, generate, agent, auth
 from server.core.auth import get_current_user
 
 @asynccontextmanager
@@ -31,12 +31,13 @@ app.add_middleware(
 app.include_router(projects.router, prefix="/api/projects", tags=["Projects"], dependencies=[Depends(get_current_user)])
 app.include_router(generate.router, prefix="/api/generate", tags=["Generate"], dependencies=[Depends(get_current_user)])
 app.include_router(agent.router, prefix="/api/agent", tags=["Agent"], dependencies=[Depends(get_current_user)])
+app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
 
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}
 
-frontend_dist = os.path.join(os.getcwd(), "frontend", "dist")
+frontend_dist = os.path.join(os.getcwd(), "dist")
 if os.path.exists(frontend_dist):
     app.mount("/assets", StaticFiles(directory=os.path.join(frontend_dist, "assets")), name="assets")
     
