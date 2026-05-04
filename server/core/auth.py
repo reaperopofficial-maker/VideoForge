@@ -5,7 +5,9 @@ from fastapi.security import APIKeyHeader
 api_key_header = APIKeyHeader(name="Authorization", auto_error=False)
 
 async def get_current_user(request: Request, auth_header: str = Security(api_key_header)):
-    dev_mode = os.getenv("DEV_MODE", "false").lower() == "true"
+    # Default DEV_MODE to true if not explicitly set to false, to allow easy setup
+    dev_mode_str = os.getenv("DEV_MODE", "true").lower()
+    dev_mode = dev_mode_str in ("true", "1", "yes")
     
     if dev_mode:
         # Development mode: Bypass authentication

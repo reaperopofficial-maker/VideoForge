@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'wouter';
-import { Menu, X, Settings, Home, Video } from 'lucide-react';
+import { Menu, X, Settings, Home, Film, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navbar() {
@@ -8,50 +8,93 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: 'Home', path: '/', icon: <Home size={18} /> },
-    { name: 'Settings', path: '/settings', icon: <Settings size={18} /> },
+    { name: 'Home', path: '/' },
+    { name: 'Features', path: '/features' },
+    { name: 'Pricing', path: '/pricing' },
   ];
 
+  const handleNavClick = (path: string) => {
+    setLocation(path);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <nav className="bg-gray-950 border-b border-gray-800 sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 w-full relative">
-          {/* Logo */}
-          <div 
-            className="flex items-center space-x-3 cursor-pointer select-none absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0"
+    <nav className="bg-brand-bg/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50 h-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+        <div className="flex justify-between items-center h-full w-full">
+          {/* Left Side: Logo */}
+          <motion.div 
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex items-center space-x-3 cursor-pointer select-none group relative"
             onClick={() => setLocation('/')}
           >
-            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg shadow-blue-500/20">
-              <Video className="text-white" size={20} />
-            </div>
-            <span className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">
-              VideoForge
+            <div className="absolute -inset-2 bg-brand-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <Film className="text-brand-primary relative z-10" size={28} strokeWidth={2.5} />
+            <span className="text-xl md:text-2xl font-bold relative z-10">
+              <span className="text-white">Cine</span>
+              <span className="text-brand-primary">Weave</span>
             </span>
+          </motion.div>
+
+          {/* Center: Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-1">
+            {navLinks.map((link) => {
+              const isActive = location === link.path;
+              return (
+                <button
+                  key={link.path}
+                  onClick={() => handleNavClick(link.path)}
+                  className="relative px-4 py-2 font-medium text-sm transition-colors"
+                >
+                  <span className={`relative z-10 transition-colors duration-300 ${isActive ? 'text-white' : 'text-gray-400 hover:text-white'}`}>
+                    {link.name}
+                  </span>
+                  {isActive && (
+                    <motion.layoutId 
+                      layoutId="nav-indicator"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary rounded-t-full shadow-[0_-2px_10px_rgba(124,58,237,0.5)]"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Right Side: Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            {navLinks.map((link) => (
-              <button
-                key={link.path}
-                onClick={() => setLocation(link.path)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-                  location === link.path
-                    ? 'bg-gray-800 text-white'
-                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'
-                }`}
-              >
-                {link.icon}
-                <span>{link.name}</span>
-              </button>
-            ))}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setLocation('/settings')}
+              className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-colors"
+            >
+              <Settings size={20} />
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center space-x-2 bg-gradient-to-r from-brand-primary to-brand-primary-light text-white px-5 py-2 rounded-full font-medium text-sm shadow-[0_0_20px_rgba(124,58,237,0.3)] hover:shadow-[0_0_25px_rgba(124,58,237,0.5)] transition-shadow"
+            >
+              <Plus size={16} />
+              <span>New Project</span>
+            </motion.button>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center space-x-4">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setLocation('/settings')}
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              <Settings size={20} />
+            </motion.button>
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              className="p-2 -mr-2 text-gray-400 hover:text-white transition-colors"
               aria-label="Open mobile menu"
             >
               <Menu size={24} />
@@ -68,44 +111,45 @@ export default function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+              className="fixed inset-0 bg-brand-bg/95 backdrop-blur-xl z-40 md:hidden"
               onClick={() => setIsMobileMenuOpen(false)}
             />
             <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-y-0 right-0 w-64 bg-gray-900 border-l border-gray-800 shadow-2xl z-50 md:hidden flex flex-col"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ ease: "easeOut", duration: 0.2 }}
+              className="fixed inset-x-4 top-20 bg-brand-card border border-brand-border rounded-2xl shadow-2xl z-50 md:hidden overflow-hidden flex flex-col"
             >
-              <div className="p-4 flex items-center justify-between border-b border-gray-800 h-16">
-                <span className="font-bold text-lg text-gray-100">Menu</span>
-                <button
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
-                  aria-label="Close mobile menu"
-                >
-                  <X size={24} />
-                </button>
-              </div>
-              <div className="flex-1 py-4 px-2 space-y-1">
-                {navLinks.map((link) => (
-                  <button
+              <div className="flex flex-col py-2">
+                {[...navLinks, { name: 'Settings', path: '/settings' }].map((link, i) => (
+                  <motion.button
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
                     key={link.path}
-                    onClick={() => {
-                      setLocation(link.path);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className={`flex items-center space-x-3 w-full px-4 py-3 min-h-[44px] rounded-xl font-medium transition-colors ${
+                    onClick={() => handleNavClick(link.path)}
+                    className={`text-left px-6 py-4 font-medium transition-colors ${
                       location === link.path
-                        ? 'bg-blue-600 outline-none text-white shadow-lg shadow-blue-500/20'
-                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                        ? 'text-brand-primary bg-brand-primary/10'
+                        : 'text-gray-300 hover:bg-white/5 hover:text-white'
                     }`}
                   >
-                    {link.icon}
-                    <span>{link.name}</span>
-                  </button>
+                    {link.name}
+                  </motion.button>
                 ))}
+                
+                <div className="p-4 mt-2 border-t border-brand-border">
+                  <motion.button
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-brand-primary to-brand-primary-light text-white px-5 py-3 rounded-xl font-medium"
+                  >
+                    <Plus size={18} />
+                    <span>New Project</span>
+                  </motion.button>
+                </div>
               </div>
             </motion.div>
           </>
