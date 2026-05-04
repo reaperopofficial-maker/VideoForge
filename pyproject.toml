@@ -1,0 +1,21 @@
+[project]
+name = "videoforge"
+version = "0.1.0"
+description = "AI Video Generation Web App"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "sqlalchemy",
+    "aiosqlite",
+    "anthropic",
+    "httpx",
+    "python-jose[cryptography]",
+    "passlib[bcrypt]",
+    "python-multipart",
+    "aiofiles",
+    "ffmpeg-python",
+    "pillow",
+    "pydantic-settings"
+]

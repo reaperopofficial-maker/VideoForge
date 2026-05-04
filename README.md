@@ -1,11 +1,23 @@
-<div align="center">
+# VideoForge
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+An AI Video Generation Web App.
 
-  <h1>Built with AI Studio</h2>
+## Features
+1. User uploads a novel/story text.
+2. Claude API generates a JSON script.
+3. Claude API extracts characters.
+4. GeminiGen.ai generates character design images (imagen-4-ultra).
+5. GeminiGen.ai generates storyboard images (nano-banana).
+6. GeminiGen.ai generates video clips (veo-3.1).
+7. FFmpeg merges the final video.
+8. SSE provides real-time progress to the frontend.
 
-  <p>The fastest path from prompt to production with Gemini.</p>
-
-  <a href="https://aistudio.google.com/apps">Start building</a>
-
-</div>
+## Tech Stack
+- **Frontend**: React 19 + TypeScript + Tailwind CSS 4 + Vite + Wouter + Zustand + Framer Motion
+- **Backend**: FastAPI (Python 3.12) + Uvicorn
+- **AI Brain**: Anthropic Claude API (claude-sonnet-4-5)
+- **Image Generation**: GeminiGen.ai API (imagen-4-ultra, nano-banana)
+- **Video Generation**: GeminiGen.ai API (veo-3.1, veo-3-fast)
+- **Database**: SQLite + SQLAlchemy 2.0 async
+- **Media Processing**: FFmpeg
+- **Web Server**: Nginx
